@@ -63,7 +63,7 @@ class CounterTest(TestCase):
 
         nonexistent = self.client.put('/counters/nonexistent')
         self.assertEqual(nonexistent.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertIn("Counter nonexistent doesn't exists", nonexistent.json['Message'])
+        self.assertIn("Counter nonexistent doesn't exist", nonexistent.json['Message'])
 
     def test_read_a_counter(self):
         """It should read a counter"""
@@ -75,5 +75,5 @@ class CounterTest(TestCase):
 
         nonexistent = self.client.get('/counters/nonexistent')
         self.assertEqual(nonexistent.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertIn("Counter nonexistent doesn't exists", nonexistent.json['Message'])
+        self.assertIn("Counter nonexistent doesn't exist", nonexistent.json['Message'])
 
