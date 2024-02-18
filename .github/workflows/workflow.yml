@@ -33,8 +33,9 @@ jobs:
 
       - name: Security Vulnerability Scanning
         run: |
-          python -m pip install snyk
-          snyk test --all-projects
+          curl -L https://static.snyk.io/cli/latest/snyk-linux -o snyk
+          chmod +x snyk
+          ./snyk test --all-projects
 
       - name: Generate Documentation
         run: |
