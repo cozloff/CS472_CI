@@ -28,11 +28,15 @@ jobs:
           flake8 src --count --max-complexity=10 --max-line-length=127 --statistics
 
       - name: Run unit tests with nose
-        run: nosetests -v --with-spec --spec-color --with-coverage --cover-package=app
+        run: |
+          nosetests -v --with-spec --spec-color --with-coverage --cover-package=app
 
       - name: Static Code Analysis
         uses: sonarsource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: .
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Security Vulnerability Scanning
@@ -57,4 +61,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Test Reports
-          path: path/to/test-reports
+          path: ./path/to/test-reports
