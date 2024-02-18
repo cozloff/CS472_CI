@@ -29,3 +29,32 @@ jobs:
 
       - name: Run unit tests with nose
         run: nosetests -v --with-spec --spec-color --with-coverage --cover-package=app
+
+      - name: Static Code Analysis
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Security Vulnerability Scanning
+        run: |
+          pip install snyk
+          snyk test --all-projects
+
+      - name: Generate Documentation
+        run: |
+          pip install sphinx
+          sphinx-apidoc -o docs/source/ src/
+          sphinx-build -b html docs/source/ docs/build/html
+
+      - name: Build and Push Docker Image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          docker build -t myapp:${{ github.sha }} .
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker push myapp:${{ github.sha }}
+
+      - name: Publish Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test Reports
+          path: path/to/test-reports

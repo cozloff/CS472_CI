@@ -77,3 +77,16 @@ class CounterTest(TestCase):
         self.assertEqual(nonexistent.status_code, status.HTTP_404_NOT_FOUND)
         self.assertIn("Counter nonexistent doesn't exist", nonexistent.json['Message'])
 
+    def test_delete_a_counter(self):
+        """It should delete a counter"""
+        self.client.post('/counters/test_delete_counter')
+        
+        delete_response = self.client.delete('/counters/test_delete_counter')
+        self.assertEqual(delete_response.status_code, status.HTTP_204_NO_CONTENT)
+        
+        get_response = self.client.get('/counters/test_delete_counter')
+        self.assertEqual(get_response.status_code, status.HTTP_404_NOT_FOUND)
+        
+        nonexistent_delete = self.client.delete('/counters/nonexistent')
+        self.assertEqual(nonexistent_delete.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertIn("Counter nonexistent doesn't exist", nonexistent_delete.json['Message'])
