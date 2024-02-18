@@ -33,7 +33,7 @@ jobs:
 
       - name: Security Vulnerability Scanning
         run: |
-          pip install snyk
+          python -m pip install snyk
           snyk test --all-projects
 
       - name: Generate Documentation
